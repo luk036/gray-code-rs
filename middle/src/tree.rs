@@ -175,7 +175,7 @@ impl Tree {
 
         if c2 != usize::MAX {
             // centers are different
-            let num_bits = 2 * (self.num_vertices - 1) as usize;
+            let num_bits = 2 * (self.num_vertices - 1);
             let mut x1: Vec<i32> = vec![0; num_bits];
             let mut x2: Vec<i32> = vec![0; num_bits];
             self.rotate_to_vertex(c1);
@@ -196,7 +196,7 @@ impl Tree {
             }
         } else {
             // centers are the same
-            let num_bits = 2 * (self.num_vertices - 1) as usize;
+            let num_bits = 2 * (self.num_vertices - 1);
             let mut x: Vec<i32> = vec![0; num_bits];
             self.rotate_to_vertex(c1);
             self.to_bitstring(&mut x);
@@ -241,15 +241,15 @@ impl Tree {
             for _ in 0..leaves.len() {
                 let u = leaves.pop_front().unwrap();
                 for &child in &self.children[u] {
-                    degs[child as usize] -= 1;
-                    if degs[child as usize] == 1 {
+                    degs[child] -= 1;
+                    if degs[child] == 1 {
                         leaves.push_back(child);
                     }
                 }
                 if u != self.root {
                     let parent = self.parent[u];
-                    degs[parent as usize] -= 1;
-                    if degs[parent as usize] == 1 {
+                    degs[parent] -= 1;
+                    if degs[parent] == 1 {
                         leaves.push_back(parent);
                     }
                 }
@@ -257,7 +257,7 @@ impl Tree {
             num_vertices_remaining -= leaves.len();
         }
 
-        assert!(leaves.len() >= 1 && leaves.len() <= 2);
+        assert!(!leaves.is_empty() && leaves.len() <= 2);
 
         let c1: usize;
         let c2: usize;
@@ -325,22 +325,13 @@ impl Tree {
             self.rotate_children_default();
         }
 
-        if bitstrings_equal(&this_bitstring[..num_bits], &canon_bitstring[..num_bits]) {
-            return true;
-        } else {
-            return false;
-        }
+        bitstrings_equal(&this_bitstring[..num_bits], &canon_bitstring[..num_bits])
     }
 
     fn is_star(&self) -> bool {
-        if self.num_vertices <= 3
+        self.num_vertices <= 3
             || self.deg(self.root) == self.num_vertices - 1
             || self.deg(self.ith_child(self.root, 0)) == self.num_vertices - 1
-        {
-            true
-        } else {
-            false
-        }
     }
 
     fn is_light_dumbbell(&self) -> bool {
@@ -350,11 +341,7 @@ impl Tree {
         let u = self.ith_child(self.root, 0);
         let k = self.num_children(u);
         let l = self.num_children(self.root) - 1;
-        if k + l + 1 < self.num_vertices - 1 || k <= l {
-            false
-        } else {
-            true
-        }
+        !(k + l + 1 < self.num_vertices - 1 || k <= l)
     }
 }
 
@@ -363,13 +350,8 @@ impl Tree {
         if self.deg(u) > 1 {
             return false;
         }
-        if (u == self.root && self.deg(self.children[u][0]) == 2)
+        (u == self.root && self.deg(self.children[u][0]) == 2)
             || (u != self.root && self.deg(self.parent[u]) == 2)
-        {
-            true
-        } else {
-            false
-        }
     }
 
     pub fn has_thin_leaf(&self) -> bool {
@@ -403,9 +385,8 @@ impl Tree {
 
     fn to_bitstring_rec(&self, x: &mut [i32], u: usize, pos: &mut usize) {
         if self.num_children(u) == 0 {
-            return;
         } else {
-            for &child in &self.children[u as usize] {
+            for &child in &self.children[u] {
                 x[*pos] = 1;
                 *pos += 1;
                 self.to_bitstring_rec(x, child, pos);
@@ -422,15 +403,15 @@ impl Tree {
         let mut k = 0;
         for j in 1..2 * length {
             let xj = xx[j];
-            let mut i = fail[j as usize - k as usize - 1];
-            while i != usize::MAX && xj != xx[k as usize + i as usize + 1] {
-                if xj < xx[k as usize + i as usize + 1] {
+            let mut i = fail[j - k - 1];
+            while i != usize::MAX && xj != xx[k + i as usize + 1] {
+                if xj < xx[k + i as usize + 1] {
                     k = j - i - 1;
                 }
                 i = fail[i as usize];
             }
-            if xj != xx[k as usize + i as usize + 1] {
-                if xj < xx[k as usize] {
+            if xj != xx[k + i as usize + 1] {
+                if xj < xx[k] {
                     k = j;
                 }
                 fail[j - k] = usize::MAX;

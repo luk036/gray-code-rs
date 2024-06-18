@@ -4,7 +4,6 @@ pub struct Wall {
     pub last: i32,
 }
 
-
 impl Wall {
     pub fn init(&mut self, first: i32, last: i32) {
         self.first = first;

@@ -72,8 +72,8 @@ mod tests {
     #[test]
     fn test_is_first_vertex() {
         let v = Vertex::new(vec![1, 0, 1]);
-        assert_eq!(v.is_first_vertex(), true);
+        assert!(v.is_first_vertex());
         let v = Vertex::new(vec![1, 1, 0, 1, 0]);
-        assert_eq!(v.is_first_vertex(), false);
+        assert!(!v.is_first_vertex());
     }
 }

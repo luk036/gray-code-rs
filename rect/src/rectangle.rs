@@ -1,12 +1,10 @@
-#[derive(Debug, Clone)]
-#[derive(Default)]
+#[derive(Debug, Clone, Default)]
 pub struct Rectangle {
     pub nwest: i32,
     pub neast: i32,
     pub swest: i32,
     pub seast: i32,
 }
-
 
 impl Rectangle {
     pub fn init(&mut self, neast: i32, seast: i32, swest: i32, nwest: i32) {

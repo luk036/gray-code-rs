@@ -1,5 +1,4 @@
-#[derive(Debug, Clone)]
-#[derive(Default)]
+#[derive(Debug, Clone, Default)]
 pub struct Wall {
     pub first: i32,
     pub last: i32,

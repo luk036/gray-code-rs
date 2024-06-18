@@ -1,4 +1,5 @@
 #[derive(Debug, Clone)]
+#[derive(Default)]
 pub struct Rectangle {
     pub nwest: i32,
     pub neast: i32,
@@ -6,16 +7,6 @@ pub struct Rectangle {
     pub seast: i32,
 }
 
-impl Default for Rectangle {
-    fn default() -> Self {
-        Self {
-            nwest: 0,
-            neast: 0,
-            swest: 0,
-            seast: 0,
-        }
-    }
-}
 
 impl Rectangle {
     pub fn init(&mut self, neast: i32, seast: i32, swest: i32, nwest: i32) {

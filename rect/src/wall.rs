@@ -1,14 +1,10 @@
 #[derive(Debug, Clone)]
+#[derive(Default)]
 pub struct Wall {
     pub first: i32,
     pub last: i32,
 }
 
-impl Default for Wall {
-    fn default() -> Self {
-        Self { first: 0, last: 0 }
-    }
-}
 
 impl Wall {
     pub fn init(&mut self, first: i32, last: i32) {

@@ -1,5 +1,13 @@
 use std::collections::VecDeque;
 
+fn bitstrings_less_than(x: &[i32], y: &[i32]) -> bool {
+    x.iter().zip(y.iter()).any(|(a, b)| a < b)
+}
+
+fn bitstrings_equal(x: &[i32], y: &[i32]) -> bool {
+    x.iter().zip(y.iter()).all(|(a, b)| a == b)
+}
+
 // A class to represent and manipulate an ordered rooted tree in doubly linked
 // adjacency list representation.
 
@@ -163,8 +171,8 @@ impl Tree {
 
 impl Tree {
     fn root_canonically(&mut self) {
-        let (mut c1, mut c2): (usize, usize); // center vertices
-        self.compute_center(&mut c1, &mut c2);
+        let (c1, c2): (usize, usize) = self.compute_center(); // center vertices
+
         if c2 != usize::MAX {
             // centers are different
             let num_bits = 2 * (self.num_vertices - 1) as usize;
@@ -181,7 +189,7 @@ impl Tree {
             assert!(self.root == c2 && self.ith_child(self.root, 0) == c1);
             self.to_bitstring(&mut x2);
 
-            if bitstrings_less_than(&x1, &x2, num_bits) {
+            if bitstrings_less_than(&x1[..num_bits], &x2[..num_bits]) {
                 self.rotate();
                 self.rotate_children(self.num_children(self.root) - 1);
                 assert!(self.root == c1 && self.ith_child(self.root, 0) == c2);
@@ -216,7 +224,7 @@ impl Tree {
 }
 
 impl Tree {
-    fn compute_center(&self, c1: &mut usize, c2: &mut usize) {
+    fn compute_center(&self) -> (usize, usize) {
         let mut degs = vec![0; self.num_vertices];
         let mut leaves = VecDeque::new();
 
@@ -251,13 +259,17 @@ impl Tree {
 
         assert!(leaves.len() >= 1 && leaves.len() <= 2);
 
+        let c1: usize;
+        let c2: usize;
+
         if leaves.len() == 1 {
-            *c1 = leaves[0];
-            *c2 = usize::MAX;
+            c1 = leaves[0];
+            c2 = usize::MAX;
         } else {
-            *c1 = leaves[0];
-            *c2 = leaves[1];
+            c1 = leaves[0];
+            c2 = leaves[1];
         }
+        (c1, c2)
     }
 }
 
@@ -288,7 +300,7 @@ impl Tree {
             if self.has_thin_leaf() {
                 return false;
             }
-            let mut v = self.ith_child(self.root, 0);
+            let v = self.ith_child(self.root, 0);
             let c = self.count_pending_edges(v);
             if (c < self.num_children(v)) || (c < 2) || (self.is_light_dumbbell()) {
                 return false;
@@ -313,7 +325,7 @@ impl Tree {
             self.rotate_children_default();
         }
 
-        if bitstrings_equal(&this_bitstring, &canon_bitstring, num_bits) {
+        if bitstrings_equal(&this_bitstring[..num_bits], &canon_bitstring[..num_bits]) {
             return true;
         } else {
             return false;
@@ -427,5 +439,22 @@ impl Tree {
             }
         }
         k
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_bitstrings_less_than() {
+        assert!(bitstrings_less_than(&[0, 1, 0], &[0, 1, 1]));
+        assert!(!bitstrings_less_than(&[0, 1, 1], &[0, 1, 0]));
+    }
+
+    #[test]
+    fn test_bitstrings_equal() {
+        assert!(bitstrings_equal(&[0, 1, 0], &[0, 1, 0]));
+        assert!(!bitstrings_equal(&[0, 1, 0], &[0, 1, 1]));
     }
 }

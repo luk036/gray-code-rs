@@ -76,7 +76,10 @@ impl Tree {
     }
 
     fn is_tau_image(&self) -> bool {
-        if self.num_vertices < 3 || self.num_children(self.root) < 2 || self.num_children(self.ith_child(self.root, 0)) > 0 {
+        if self.num_vertices < 3
+            || self.num_children(self.root) < 2
+            || self.num_children(self.ith_child(self.root, 0)) > 0
+        {
             return false;
         }
         true
@@ -156,14 +159,14 @@ impl Tree {
             false
         }
     }
-
 }
 
 impl Tree {
     fn root_canonically(&mut self) {
         let (mut c1, mut c2): (usize, usize); // center vertices
         self.compute_center(&mut c1, &mut c2);
-        if c2 != usize::MAX { // centers are different
+        if c2 != usize::MAX {
+            // centers are different
             let num_bits = 2 * (self.num_vertices - 1) as usize;
             let mut x1: Vec<i32> = vec![0; num_bits];
             let mut x2: Vec<i32> = vec![0; num_bits];
@@ -183,7 +186,8 @@ impl Tree {
                 self.rotate_children(self.num_children(self.root) - 1);
                 assert!(self.root == c1 && self.ith_child(self.root, 0) == c2);
             }
-        } else { // centers are the same
+        } else {
+            // centers are the same
             let num_bits = 2 * (self.num_vertices - 1) as usize;
             let mut x: Vec<i32> = vec![0; num_bits];
             self.rotate_to_vertex(c1);
@@ -194,7 +198,8 @@ impl Tree {
             for i in 0..num_bits {
                 if x[i] == 1 {
                     depth += 1;
-                } else { // x[i] == 0
+                } else {
+                    // x[i] == 0
                     depth -= 1;
                 }
                 subtree_count[i] = c;
@@ -278,7 +283,7 @@ impl Tree {
             while (self.num_children(v) != 1) || (self.num_children(self.ith_child(v, 0)) != 0) {
                 self.rotate();
                 v = self.ith_child(self.root, 0);
-            };
+            }
         } else {
             if self.has_thin_leaf() {
                 return false;
@@ -316,7 +321,10 @@ impl Tree {
     }
 
     fn is_star(&self) -> bool {
-        if self.num_vertices <= 3 || self.deg(self.root) == self.num_vertices - 1 || self.deg(self.ith_child(self.root, 0)) == self.num_vertices - 1 {
+        if self.num_vertices <= 3
+            || self.deg(self.root) == self.num_vertices - 1
+            || self.deg(self.ith_child(self.root, 0)) == self.num_vertices - 1
+        {
             true
         } else {
             false
@@ -343,8 +351,9 @@ impl Tree {
         if self.deg(u) > 1 {
             return false;
         }
-        if (u == self.root && self.deg(self.children[u][0]) == 2) ||
-           (u != self.root && self.deg(self.parent[u]) == 2) {
+        if (u == self.root && self.deg(self.children[u][0]) == 2)
+            || (u != self.root && self.deg(self.parent[u]) == 2)
+        {
             true
         } else {
             false

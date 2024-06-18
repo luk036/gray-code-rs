@@ -1,5 +1,3 @@
-
-
 // A struct to represent and manipulate a vertex of the cube of odd dimension 2n+1
 #[derive(Debug, Clone)]
 pub struct Vertex {

@@ -2,7 +2,12 @@
 // The 4 corner vertices of the rectangulation have type 'corner'.
 #[derive(Debug, Clone, PartialEq)]
 pub enum VertexType {
-    Corner, Top, Bottom, Left, Right, None
+    Corner,
+    Top,
+    Bottom,
+    Left,
+    Right,
+    None,
 }
 
 #[derive(Debug, Clone)]
@@ -33,8 +38,10 @@ impl Vertex {
         self.south = south;
         self.west = west;
 
-        let zeros = (self.north == 0) as i32 + (self.south == 0) as i32 +
-                    (self.west == 0) as i32 + (self.east == 0) as i32;
+        let zeros = (self.north == 0) as i32
+            + (self.south == 0) as i32
+            + (self.west == 0) as i32
+            + (self.east == 0) as i32;
 
         if zeros >= 3 || zeros <= 0 {
             self.type_ = VertexType::None;

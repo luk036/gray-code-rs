@@ -1,18 +1,20 @@
 #[derive(Debug, Clone, PartialEq)]
 pub enum EdgeDir {
-   Hor, Ver, None
+    Hor,
+    Ver,
+    None,
 }
 
 #[derive(Debug, Clone)]
 pub struct Edge {
-   pub dir: EdgeDir,
-   pub tail: i32,
-   pub head: i32,
-   pub prev: i32,
-   pub next: i32,
-   pub left: i32,
-   pub right: i32,
-   pub wall: i32,
+    pub dir: EdgeDir,
+    pub tail: i32,
+    pub head: i32,
+    pub prev: i32,
+    pub next: i32,
+    pub left: i32,
+    pub right: i32,
+    pub wall: i32,
 }
 
 impl Default for Edge {
@@ -31,7 +33,17 @@ impl Default for Edge {
 }
 
 impl Edge {
-    pub fn init(&mut self, dir: EdgeDir, tail: i32, head: i32, prev: i32, next: i32, left: i32, right: i32, wall: i32) {
+    pub fn init(
+        &mut self,
+        dir: EdgeDir,
+        tail: i32,
+        head: i32,
+        prev: i32,
+        next: i32,
+        left: i32,
+        right: i32,
+        wall: i32,
+    ) {
         self.dir = dir;
         self.tail = tail;
         self.head = head;

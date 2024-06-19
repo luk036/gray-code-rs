@@ -9,14 +9,14 @@ pub enum EdgeDir {
 /// Represents an edge in a graph with additional properties like direction, endpoints, and adjacency info.
 #[derive(Debug)]
 pub struct Edge {
-    dir_: EdgeDir,
-    tail_: i32,
-    head_: i32,
-    prev_: i32,
-    next_: i32,
-    left_: i32,
-    right_: i32,
-    wall_: i32,
+    pub dir: EdgeDir,
+    pub tail: i32,
+    pub head: i32,
+    pub prev: i32,
+    pub next: i32,
+    pub left: i32,
+    pub right: i32,
+    pub wall: i32,
 }
 
 impl Default for Edge {
@@ -29,14 +29,14 @@ impl Edge {
     /// Constructs a new `Edge` with default values.
     pub fn new() -> Self {
         Edge {
-            dir_: EdgeDir::None,
-            tail_: 0,
-            head_: 0,
-            prev_: 0,
-            next_: 0,
-            left_: 0,
-            right_: 0,
-            wall_: 0,
+            dir: EdgeDir::None,
+            tail: 0,
+            head: 0,
+            prev: 0,
+            next: 0,
+            left: 0,
+            right: 0,
+            wall: 0,
         }
     }
 
@@ -52,14 +52,14 @@ impl Edge {
         right: i32,
         wall: i32,
     ) {
-        self.dir_ = dir;
-        self.tail_ = tail;
-        self.head_ = head;
-        self.prev_ = prev;
-        self.next_ = next;
-        self.left_ = left;
-        self.right_ = right;
-        self.wall_ = wall;
+        self.dir = dir;
+        self.tail = tail;
+        self.head = head;
+        self.prev = prev;
+        self.next = next;
+        self.left = left;
+        self.right = right;
+        self.wall = wall;
     }
 }
 
@@ -68,17 +68,17 @@ mod tests {
     use super::*;
 
     #[test]
-    fn test_edge_initialization() {
+    fn testedgeinitialization() {
         let mut edge = Edge::new();
         edge.init(EdgeDir::Hor, 1, 2, 3, 4, 5, 6, 7);
 
-        assert_eq!(edge.dir_, EdgeDir::Hor);
-        assert_eq!(edge.tail_, 1);
-        assert_eq!(edge.head_, 2);
-        assert_eq!(edge.prev_, 3);
-        assert_eq!(edge.next_, 4);
-        assert_eq!(edge.left_, 5);
-        assert_eq!(edge.right_, 6);
-        assert_eq!(edge.wall_, 7);
+        assert_eq!(edge.dir, EdgeDir::Hor);
+        assert_eq!(edge.tail, 1);
+        assert_eq!(edge.head, 2);
+        assert_eq!(edge.prev, 3);
+        assert_eq!(edge.next, 4);
+        assert_eq!(edge.left, 5);
+        assert_eq!(edge.right, 6);
+        assert_eq!(edge.wall, 7);
     }
 }

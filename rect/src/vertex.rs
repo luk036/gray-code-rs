@@ -12,11 +12,11 @@ pub enum VertexType {
 // Define a struct for the Vertex.
 #[derive(Debug)]
 pub struct Vertex {
-    north: i32,
-    east: i32,
-    south: i32,
-    west: i32,
-    type_: VertexType,
+    pub north: i32,
+    pub east: i32,
+    pub south: i32,
+    pub west: i32,
+    pub type_: VertexType,
 }
 
 impl Default for Vertex {

@@ -1,5 +1,5 @@
 // A struct to represent and manipulate a vertex of the cube of odd dimension 2n+1
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Default)]
 pub struct Vertex {
     bits: Vec<i32>,
 }

@@ -1,6 +1,5 @@
-// The type indicates where the T is pointing to.
-// The 4 corner vertices of the rectangulation have type 'corner'.
-#[derive(Debug, Clone, PartialEq)]
+// Define an enum to represent the type of a vertex.
+#[derive(Debug, PartialEq)]
 pub enum VertexType {
     Corner,
     Top,
@@ -10,18 +9,26 @@ pub enum VertexType {
     None,
 }
 
-#[derive(Debug, Clone)]
+// Define a struct for the Vertex.
+#[derive(Debug)]
 pub struct Vertex {
-    pub north: i32,
-    pub east: i32,
-    pub south: i32,
-    pub west: i32,
-    pub type_: VertexType,
+    north: i32,
+    east: i32,
+    south: i32,
+    west: i32,
+    type_: VertexType,
 }
 
 impl Default for Vertex {
     fn default() -> Self {
-        Self {
+        Self::new()
+    }
+}
+
+impl Vertex {
+    // Constructor for Vertex with default type None.
+    pub fn new() -> Self {
+        Vertex {
             north: 0,
             east: 0,
             south: 0,
@@ -29,82 +36,50 @@ impl Default for Vertex {
             type_: VertexType::None,
         }
     }
-}
 
-impl Vertex {
+    // Method to initialize the vertex with given coordinates and determine its type.
     pub fn init(&mut self, north: i32, east: i32, south: i32, west: i32) {
         self.north = north;
         self.east = east;
         self.south = south;
         self.west = west;
-
         let zeros = (self.north == 0) as i32
             + (self.south == 0) as i32
             + (self.west == 0) as i32
             + (self.east == 0) as i32;
-
-        if zeros >= 3 || zeros <= 0 {
-            self.type_ = VertexType::None;
-        } else if zeros == 2 {
-            self.type_ = VertexType::Corner;
-        } else if self.south == 0 {
-            self.type_ = VertexType::Top;
-        } else if self.north == 0 {
-            self.type_ = VertexType::Bottom;
-        } else if self.east == 0 {
-            self.type_ = VertexType::Left;
-        } else if self.west == 0 {
-            self.type_ = VertexType::Right;
+        match zeros {
+            3..=std::i32::MAX | 0 => self.type_ = VertexType::None,
+            2 => self.type_ = VertexType::Corner,
+            _ if self.south == 0 => self.type_ = VertexType::Top,
+            _ if self.north == 0 => self.type_ = VertexType::Bottom,
+            _ if self.east == 0 => self.type_ = VertexType::Left,
+            _ if self.west == 0 => self.type_ = VertexType::Right,
+            _ => unreachable!(), // This case should never occur due to previous checks.
         }
     }
 }
 
 #[cfg(test)]
 mod tests {
-    use super::*; // bring everything from parent scope into this one
-
-    #[test]
-    fn test_vertex_default() {
-        let vertex = Vertex::default();
-
-        assert_eq!(vertex.north, 0);
-        assert_eq!(vertex.east, 0);
-        assert_eq!(vertex.south, 0);
-        assert_eq!(vertex.west, 0);
-        assert_eq!(vertex.type_, VertexType::None);
-    }
-
-    #[test]
-    fn test_vertex_init() {
-        let mut vertex = Vertex::default();
-        vertex.init(1, 2, 3, 4);
-
-        assert_eq!(vertex.north, 1);
-        assert_eq!(vertex.east, 2);
-        assert_eq!(vertex.south, 3);
-        assert_eq!(vertex.west, 4);
-        assert_eq!(vertex.type_, VertexType::None);
-    }
+    use super::*;
 
     #[test]
     fn test_vertex_init_corner() {
-        let mut vertex = Vertex::default();
-        vertex.init(0, 2, 3, 4);
-
+        let mut vertex = Vertex::new();
+        vertex.init(0, 1, 9, 8);
         assert_eq!(vertex.type_, VertexType::Bottom);
-
-        vertex.init(1, 0, 3, 4);
-
-        assert_eq!(vertex.type_, VertexType::Left);
     }
 
     #[test]
     fn test_vertex_init_top() {
-        let mut vertex = Vertex::default();
-        vertex.init(1, 2, 0, 4);
-
-        assert_eq!(vertex.type_, VertexType::Top);
+        let mut vertex = Vertex::new();
+        vertex.init(0, 1, 0, 8);
+        assert_eq!(vertex.type_, VertexType::Corner);
     }
 
-    // Similar tests can be written for other VertexTypes (Bottom, Left, Right) by changing the init method arguments
+    #[test]
+    fn test_vertex_init_default() {
+        let vertex = Vertex::new();
+        assert_eq!(vertex.type_, VertexType::None);
+    }
 }

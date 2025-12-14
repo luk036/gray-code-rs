@@ -3,44 +3,51 @@ use crate::tree::Tree;
 use crate::vertex::Vertex;
 
 pub struct HamCycle<'a> {
+    #[allow(dead_code)]
     x: Vertex,
+    #[allow(dead_code)]
     y: Vertex,
+    #[allow(dead_code)]
     limit: i64,
-    visit_f: Box<dyn Fn(&Vec<i32>, i32)>,
+    #[allow(dead_code)]
+    visit_f: Box<dyn Fn(&Vec<i32>, i32) + 'a>,
     length: i64,
     phantom: std::marker::PhantomData<&'a ()>,
 }
 
 impl<'a> HamCycle<'a> {
     pub fn new(x: Vertex, limit: i64, visit_f: impl Fn(&Vec<i32>, i32) + 'a) -> Self {
-        assert!(x.bits().len() % 2 == 1);
-        let n = x.bits().len() / 2;
+        assert!(x.get_bits().len() % 2 == 1);
+        let n = x.get_bits().len() / 2;
 
         let mut xs = x.clone();
         let mut skip = 0;
 
-        if xs.bits()[2 * n] == 1 {
+        if xs.get_bits()[2 * n] == 1 {
             xs.rev_inv();
             skip += xs.to_last_vertex();
             xs.rev_inv();
-            xs.bits_mut()[2 * n] = 0;
+            xs.get_bits_mut()[2 * n] = 0;
             skip += 1;
         }
         skip += xs.to_first_vertex();
         assert!(xs.is_first_vertex());
 
-        let mut y_tree = Tree::new(xs.clone());
+        let mut y_tree = Tree::new(xs.get_bits().clone());
 
         if skip > 0 && y_tree.flip_tree() {
-            if xs.bits()[1] == 1 && skip <= 5 {
-                skip = 6 - skip;
+            if xs.get_bits()[1] == 1 && skip <= 5 {
+                // skip = 6 - skip; // Unused assignment
             }
-            let y_vec = y_tree
-                .to_bitstring()
+            let bits_len = xs.get_bits().len();
+            let num_bits = bits_len - 1; // bits_len is 2n+1, so num_bits = 2n
+            let mut bitstring = vec![0; num_bits];
+            y_tree.to_bitstring(&mut bitstring);
+            let y_vec = bitstring
                 .into_iter()
                 .chain(std::iter::once(0))
                 .collect();
-            xs = Vertex::from_bits(y_vec);
+            xs = Vertex::new(y_vec);
         }
 
         let mut hc = HamCycle {
@@ -68,6 +75,7 @@ impl<'a> HamCycle<'a> {
         self.length
     }
 
+    #[allow(dead_code)]
     fn flip_seq(&mut self, seq: &[i32], dist_to_start: &mut i32, final_path: bool) -> bool {
         if *dist_to_start > 0
             || final_path
@@ -82,7 +90,7 @@ impl<'a> HamCycle<'a> {
                 let i = j as usize;
                 if *dist_to_start == 0 || final_path {
                     self.y.flip_bit(i);
-                    (self.visit_f)(&self.y.get_bits(), i);
+                    (self.visit_f)(&self.y.get_bits(), i as i32);
                     self.length += 1;
                 } else {
                     self.y.flip_bit(i);
@@ -95,7 +103,7 @@ impl<'a> HamCycle<'a> {
             for &j in seq.iter() {
                 let i = j as usize;
                 self.y.flip_bit(i);
-                (self.visit_f)(&self.y.get_bits(), i);
+                (self.visit_f)(&self.y.get_bits(), i as i32);
             }
             self.length += seq.len() as i64;
         }
@@ -110,8 +118,8 @@ mod tests {
     #[test]
     fn test_ham_cycle_new() {
         // Define a mock Vertex and visit function for testing purposes
-        let mock_vertex = Vertex::default(); // Replace with actual initialization
-        let visit_fn: VisitFn = |_, _| {}; // No-op visit function
+        let mock_vertex = Vertex::new(vec![1, 0, 1]); // Create a valid vertex
+        let visit_fn = |_: &Vec<i32>, _: i32| {}; // No-op visit function
 
         let _hc = HamCycle::new(mock_vertex, 10, visit_fn);
         // Add assertions to check the state of _hc after construction

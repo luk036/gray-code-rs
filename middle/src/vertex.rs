@@ -30,6 +30,10 @@ impl Vertex {
         &self.bits
     }
 
+    pub fn get_bits_mut(&mut self) -> &mut Vec<i32> {
+        &mut self.bits
+    }
+
     // reverse and invert bitstring
     pub fn rev_inv(&mut self) {
         let len = self.bits.len();
@@ -49,6 +53,22 @@ impl Vertex {
             }
         }
         false
+    }
+
+    pub fn to_last_vertex(&mut self) -> usize {
+        // Stub implementation
+        0
+    }
+
+    pub fn to_first_vertex(&mut self) -> usize {
+        // Stub implementation
+        0
+    }
+
+    pub fn flip_bit(&mut self, i: usize) {
+        if i < self.bits.len() {
+            self.bits[i] = 1 - self.bits[i];
+        }
     }
 }
 

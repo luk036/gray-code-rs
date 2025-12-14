@@ -1,4 +1,4 @@
-use crate::edge::{Edge, EdgeDir};
+use crate::edge::Edge;
 use crate::rectangle::Rectangle;
 use crate::vertex::{Vertex, VertexType};
 use crate::wall::Wall;
@@ -98,7 +98,7 @@ impl Rectangulation {
 impl Rectangulation {
     // Method to print coordinates in a generic rectangulation
     pub fn print_coordinates_generic(&self) {
-        let mut vertex_x_coord = vec![-1; 2 * self.n + 3];
+        let _vertex_x_coord = vec![-1; 2 * self.n + 3];
         let mut active_vertices = Vec::new();
 
         // Populate initial active vertices

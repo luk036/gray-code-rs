@@ -404,13 +404,13 @@ impl Tree {
         for j in 1..2 * length {
             let xj = xx[j];
             let mut i = fail[j - k - 1];
-            while i != usize::MAX && xj != xx[k + i as usize + 1] {
-                if xj < xx[k + i as usize + 1] {
+            while i != usize::MAX && xj != xx[k + i + 1] {
+                if xj < xx[k + i + 1] {
                     k = j - i - 1;
                 }
-                i = fail[i as usize];
+                i = fail[i];
             }
-            if xj != xx[k + i as usize + 1] {
+            if xj != xx[k + i + 1] {
                 if xj < xx[k] {
                     k = j;
                 }

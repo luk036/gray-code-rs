@@ -43,10 +43,7 @@ impl<'a> HamCycle<'a> {
             let num_bits = bits_len - 1; // bits_len is 2n+1, so num_bits = 2n
             let mut bitstring = vec![0; num_bits];
             y_tree.to_bitstring(&mut bitstring);
-            let y_vec = bitstring
-                .into_iter()
-                .chain(std::iter::once(0))
-                .collect();
+            let y_vec = bitstring.into_iter().chain(std::iter::once(0)).collect();
             xs = Vertex::new(y_vec);
         }
 
@@ -90,7 +87,7 @@ impl<'a> HamCycle<'a> {
                 let i = j as usize;
                 if *dist_to_start == 0 || final_path {
                     self.y.flip_bit(i);
-                    (self.visit_f)(&self.y.get_bits(), i as i32);
+                    (self.visit_f)(self.y.get_bits(), i as i32);
                     self.length += 1;
                 } else {
                     self.y.flip_bit(i);
@@ -103,7 +100,7 @@ impl<'a> HamCycle<'a> {
             for &j in seq.iter() {
                 let i = j as usize;
                 self.y.flip_bit(i);
-                (self.visit_f)(&self.y.get_bits(), i as i32);
+                (self.visit_f)(self.y.get_bits(), i as i32);
             }
             self.length += seq.len() as i64;
         }

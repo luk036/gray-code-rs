@@ -2,6 +2,8 @@
 use crate::tree::Tree;
 use crate::vertex::Vertex;
 
+type VisitFn<'a> = dyn Fn(&Vec<i32>, i32) + 'a;
+
 pub struct HamCycle<'a> {
     #[allow(dead_code)]
     x: Vertex,
@@ -10,7 +12,7 @@ pub struct HamCycle<'a> {
     #[allow(dead_code)]
     limit: i64,
     #[allow(dead_code)]
-    visit_f: Box<dyn Fn(&Vec<i32>, i32) + 'a>,
+    visit_f: Box<VisitFn<'a>>,
     length: i64,
     phantom: std::marker::PhantomData<&'a ()>,
 }

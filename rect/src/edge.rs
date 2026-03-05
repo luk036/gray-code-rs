@@ -41,6 +41,7 @@ impl Edge {
     }
 
     /// Initializes the edge with provided parameters.
+    #[allow(clippy::too_many_arguments)]
     pub fn init(
         &mut self,
         dir: EdgeDir,

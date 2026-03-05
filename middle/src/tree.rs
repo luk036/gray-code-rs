@@ -29,8 +29,8 @@ impl Tree {
         let root = 0;
         let mut u = 0; // the current vertex
         let mut n = 1; // the number of vertices created so far
-        for i in 0..xv.len() - 1 {
-            if xv[i] == 1 {
+        for x in xv.iter().take(xv.len() - 1) {
+            if *x == 1 {
                 children[u].push_back(n);
                 parent[n] = u;
                 u = n;
@@ -228,9 +228,9 @@ impl Tree {
         let mut degs = vec![0; self.num_vertices];
         let mut leaves = VecDeque::new();
 
-        for i in 0..self.num_vertices {
-            degs[i] = self.deg(i);
-            if degs[i] == 1 {
+        for (i, deg) in degs.iter_mut().enumerate() {
+            *deg = self.deg(i);
+            if *deg == 1 {
                 leaves.push_back(i);
             }
         }

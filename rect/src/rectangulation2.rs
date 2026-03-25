@@ -8,41 +8,63 @@ use RectangulationPattern::*;
 use RectangulationType::*;
 use RectangulationDirection::*;
 
+/// Represents the type of rectangulation.
 #[derive(Debug, PartialEq)]
 enum RectangulationType {
+    /// A generic rectangulation.
     Generic,
+    /// A bottom-aligned rectangulation.
     Baligned,
+    /// A diagonal rectangulation.
     Diagonal,
 }
 
+/// Represents the direction in a rectangulation.
 #[derive(Debug, PartialEq)]
 enum RectangulationDirection {
+    /// Left direction.
     Left,
+    /// Right direction.
     Right,
+    /// No direction specified.
     None,
 }
 
+/// Represents the pattern used for generating rectangulations.
 #[derive(Debug, PartialEq)]
 enum RectangulationPattern {
+    /// Windmill pattern rotating clockwise.
     WMillClockwise,
+    /// Windmill pattern rotating counterclockwise.
     WMillCounterclockwise,
+    /// Brick pattern going left to right.
     BrickLeftright,
+    /// Brick pattern going right to left.
     BrickRightleft,
+    /// Brick pattern going top to bottom.
     BrickTopbottom,
+    /// Brick pattern going bottom to top.
     BrickBottomtop,
+    /// Horizontal vertical pattern.
     HVertical,
+    /// Horizontal horizontal pattern.
     HHorizontal,
 }
 
+/// A struct representing a rectangulation of n rectangles.
 pub struct Rectangulation {
     n: i32,
     type_: RectangulationType,
     patterns: Vec<RectangulationPattern>,
     o: Vec<RectangulationDirection>,
     s: Vec<i32>,
+    /// The vertices of the rectangulation.
     pub vertices: Vec<Vertex>,
+    /// The walls of the rectangulation.
     pub walls: Vec<Wall>,
+    /// The edges of the rectangulation.
     pub edges: Vec<Edge>,
+    /// The rectangles in the rectangulation.
     pub rectangles: Vec<Rectangle>,
 }
 
@@ -112,43 +134,71 @@ impl Rectangulation {
     // Continue with other methods...
 }
 
+/// Represents the direction of an edge.
 pub enum EdgeDir {
+    /// Horizontal direction.
     Hor,
+    /// Vertical direction.
     Ver,
+    /// No direction.
     None,
 }
 
+/// Represents the type of a vertex.
 pub enum VertexType {
+    /// No specific type.
     None,
+    /// A corner vertex.
     Corner,
+    /// A bottom vertex.
     Bottom,
+    /// A top vertex.
     Top,
+    /// A left vertex.
     Left,
+    /// A right vertex.
     Right,
 }
 
+/// Represents the type of rectangulation.
 pub enum RectangulationType {
+    /// A generic rectangulation.
     Generic,
+    /// A diagonal rectangulation.
     Diagonal,
+    /// A bottom-aligned rectangulation.
     Baligned,
 }
 
+/// Represents the pattern used for generating rectangulations.
 pub enum RectangulationPattern {
+    /// Brick pattern going left to right.
     BrickLeftright,
+    /// Brick pattern going right to left.
     BrickRightleft,
+    /// Brick pattern going bottom to top.
     BrickBottomtop,
+    /// Brick pattern going top to bottom.
     BrickTopbottom,
+    /// Windmill pattern rotating clockwise.
     WMillClockwise,
+    /// Windmill pattern rotating counterclockwise.
     WMillCounterclockwise,
+    /// Horizontal vertical pattern.
     HVertical,
+    /// Horizontal horizontal pattern.
     HHorizontal,
 }
 
+/// Represents the direction in a rectangulation.
 pub enum RectangulationDirection {
+    /// Left direction.
     Left,
+    /// Right direction.
     Right,
 }
 
+/// Represents an edge in a graph.
 pub struct Edge {
     dir: EdgeDir,
     tail: i32,
@@ -160,6 +210,7 @@ pub struct Edge {
     wall: i32,
 }
 
+/// Represents a vertex in a rectangulation.
 pub struct Vertex {
     north: i32,
     east: i32,
@@ -168,6 +219,7 @@ pub struct Vertex {
     type_: VertexType,
 }
 
+/// Represents a rectangle with four corners.
 pub struct Rectangle {
     nwest: i32,
     swest: i32,
@@ -175,11 +227,13 @@ pub struct Rectangle {
     seast: i32,
 }
 
+/// Represents a wall with start and end points.
 pub struct Wall {
     first: i32,
     last: i32,
 }
 
+/// A struct representing a rectangulation of n rectangles.
 pub struct Rectangulation {
     n: i32,
     type_: RectangulationType,
@@ -193,6 +247,13 @@ pub struct Rectangulation {
 }
 
 impl Rectangulation {
+    /// Constructs a new Rectangulation.
+    ///
+    /// # Arguments
+    ///
+    /// * `n` - The number of rectangles.
+    /// * `type_` - The type of rectangulation.
+    /// * `patterns` - The patterns to use.
     pub fn new(n: i32, type_: RectangulationType, patterns: Vec<RectangulationPattern>) -> Self {
         Rectangulation {
             n,
@@ -207,6 +268,14 @@ impl Rectangulation {
         }
     }
 
+    /// Initializes the rectangulation with vertices, walls, edges, and rectangles.
+    ///
+    /// # Arguments
+    ///
+    /// * `vertices` - The vertices of the rectangulation.
+    /// * `walls` - The walls of the rectangulation.
+    /// * `edges` - The edges of the rectangulation.
+    /// * `rectangles` - The rectangles in the rectangulation.
     pub fn init(&mut self, vertices: &Vec<Vertex>, walls: &Vec<Wall>, edges: &Vec<Edge>, rectangles: &Vec<Rectangle>) {
         self.vertices = vertices.clone();
         self.walls = walls.clone();
@@ -214,6 +283,7 @@ impl Rectangulation {
         self.rectangles = rectangles.clone();
     }
 
+    /// Sets all directions to vertical and initializes all data structures.
     pub fn set_all_vertical(&mut self) {
         // initialize the 3n+1 edges, 2n+2 vertices, n rectangles and n+3 walls
         self.edges = vec![Edge { dir: EdgeDir::None, tail: 0, head: 0, prev: 0, next: 0, left: 0, right: 0, wall: 0 }; 3 * self.n as usize + 2];
@@ -274,6 +344,7 @@ impl Rectangulation {
         }
     }
 
+    /// Prints the data structures of the rectangulation (debug method).
     pub fn print_data(&self) {
         println!("edges:");
         for (i, e) in self.edges.iter().enumerate() {
@@ -307,6 +378,7 @@ impl Rectangulation {
         }
     }
 
+    /// Prints coordinates based on the rectangulation type.
     pub fn print_coordinates(&self) {
         match self.type_ {
             RectangulationType::Generic => self.print_coordinates_generic(),
@@ -315,6 +387,9 @@ impl Rectangulation {
         }
     }
 
+    /// Prints coordinates for a generic rectangulation.
+    ///
+    /// Uses a greedy algorithm to find an equispaced grid for vertex placement.
     pub fn print_coordinates_generic(&self) {
         // Run the greedy algorithm for finding an equispaced grid to place the vertices of the rectangles.
         // For finding the x-coordinates of the grid, we do a sweep from west to east.
@@ -431,10 +506,17 @@ impl Rectangulation {
         }
     }
 
+    /// Prints coordinates for a diagonal rectangulation.
+    ///
+    /// This is obtained by mirroring the generic case along the main diagonal.
     pub fn print_coordinates_diagonal(&self) {
         // this code is obtained by mirroring the case RectangulationType::Generic along the main diagonal
     }
 
+    /// Advances to the next rectangulation.
+    ///
+    /// Runs one iteration of the memoryless algorithm.
+    /// Returns true if the next rectangulation is not the identity, false otherwise.
     pub fn next(&mut self) -> bool {
         // Run one iteration of the memoryless algorithm, return true if the next rectangulation is not the identity, false otherwise.
         // M3 - Select rectangle
@@ -476,6 +558,11 @@ impl Rectangulation {
         true
     }
 
+    /// Checks if rectangle j is bottom-based.
+    ///
+    /// # Arguments
+    ///
+    /// * `j` - The rectangle index.
     pub fn is_bottom_based(&self, j: i32) -> bool {
         // this code is obtained by mirroring the case RectangulationDirection::Right along the main diagonal
         let a = self.rectangles[j as usize].nwest;
@@ -491,6 +578,11 @@ impl Rectangulation {
         }
     }
 
+    /// Checks if rectangle j is right-based.
+    ///
+    /// # Arguments
+    ///
+    /// * `j` - The rectangle index.
     pub fn is_right_based(&self, j: i32) -> bool {
         // this code is obtained by mirroring the case RectangulationDirection::Left along the main diagonal
         let a = self.rectangles[j as usize].nwest;
@@ -506,6 +598,11 @@ impl Rectangulation {
         }
     }
 
+    /// Removes the head edge from a wall.
+    ///
+    /// # Arguments
+    ///
+    /// * `beta` - The edge index to remove.
     pub fn rem_head(&mut self, beta: i32) {
         // Step 1 - Prepare
         let alpha = self.edges[beta as usize].prev;
@@ -522,6 +619,11 @@ impl Rectangulation {
         self.walls[x as usize].first = a;
     }
 
+    /// Removes the tail edge from a wall.
+    ///
+    /// # Arguments
+    ///
+    /// * `beta` - The edge index to remove.
     pub fn rem_tail(&mut self, beta: i32) {
         // Step 1 - Prepare
         let alpha = self.edges[beta as usize].next;

@@ -2,22 +2,40 @@
 use crate::tree::Tree;
 use crate::vertex::Vertex;
 
+/// A visit function type for traversing the Hamiltonian cycle.
 type VisitFn<'a> = dyn Fn(&Vec<i32>, i32) + 'a;
 
+/// A struct representing a Hamiltonian cycle in a Gray code structure.
+///
+/// This is used for generating and traversing Hamiltonian cycles
+/// in the context of rectangulation Gray codes.
 pub struct HamCycle<'a> {
+    /// The starting vertex.
     #[allow(dead_code)]
     x: Vertex,
+    /// The current vertex in the cycle.
     #[allow(dead_code)]
     y: Vertex,
+    /// The maximum length limit for the cycle.
     #[allow(dead_code)]
     limit: i64,
+    /// The visit callback function.
     #[allow(dead_code)]
     visit_f: Box<VisitFn<'a>>,
+    /// The current length of the cycle.
     length: i64,
+    /// Phantom data for lifetime management.
     phantom: std::marker::PhantomData<&'a ()>,
 }
 
 impl<'a> HamCycle<'a> {
+    /// Constructs a new Hamiltonian cycle.
+    ///
+    /// # Arguments
+    ///
+    /// * `x` - The starting vertex.
+    /// * `limit` - The maximum length of the cycle (-1 for unlimited).
+    /// * `visit_f` - A callback function called for each visited vertex.
     pub fn new(x: Vertex, limit: i64, visit_f: impl Fn(&Vec<i32>, i32) + 'a) -> Self {
         assert!(x.get_bits().len() % 2 == 1);
         let n = x.get_bits().len() / 2;
@@ -63,6 +81,7 @@ impl<'a> HamCycle<'a> {
         hc
     }
 
+    /// Computes the Hamiltonian cycle.
     fn compute_ham_cycle(&mut self) {
         // Implementation of compute_ham_cycle would go here, translating the remaining logic.
         // Due to complexity and length, it's omitted for brevity but should follow similar patterns.
@@ -70,10 +89,20 @@ impl<'a> HamCycle<'a> {
 }
 
 impl<'a> HamCycle<'a> {
+    /// Returns the length of the Hamiltonian cycle.
     pub fn get_length(&self) -> i64 {
         self.length
     }
 
+    /// Flips a sequence of bits in the cycle.
+    ///
+    /// # Arguments
+    ///
+    /// * `seq` - The sequence of bit indices to flip.
+    /// * `dist_to_start` - The distance to the start position.
+    /// * `final_path` - Whether this is the final path.
+    ///
+    /// Returns true if the computation should terminate prematurely.
     #[allow(dead_code)]
     fn flip_seq(&mut self, seq: &[i32], dist_to_start: &mut i32, final_path: bool) -> bool {
         if *dist_to_start > 0

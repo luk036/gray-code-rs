@@ -1,21 +1,38 @@
-// Define an enum to represent the type of a vertex.
+/// Represents the type of a vertex in a rectangulation.
+///
+/// Different vertex types indicate the position and connectivity
+/// of a vertex within the rectangular partition.
 #[derive(Debug, PartialEq)]
 pub enum VertexType {
+    /// A corner vertex where two edges meet at a rectangle corner.
     Corner,
+    /// A top vertex lying on the top boundary.
     Top,
+    /// A bottom vertex lying on the bottom boundary.
     Bottom,
+    /// A left vertex lying on the left boundary.
     Left,
+    /// A right vertex lying on the right boundary.
     Right,
+    /// A generic vertex with no special boundary position.
     None,
 }
 
-// Define a struct for the Vertex.
+/// Represents a vertex in a rectangulation with coordinates and type.
+///
+/// Each vertex has four coordinate values representing its position
+/// relative to the four boundaries (north, east, south, west).
 #[derive(Debug)]
 pub struct Vertex {
+    /// The north coordinate of the vertex.
     pub north: i32,
+    /// The east coordinate of the vertex.
     pub east: i32,
+    /// The south coordinate of the vertex.
     pub south: i32,
+    /// The west coordinate of the vertex.
     pub west: i32,
+    /// The type of the vertex (Corner, Top, Bottom, Left, Right, None).
     pub type_: VertexType,
 }
 
@@ -26,7 +43,7 @@ impl Default for Vertex {
 }
 
 impl Vertex {
-    // Constructor for Vertex with default type None.
+    /// Constructs a new `Vertex` with default coordinates and type `None`.
     pub fn new() -> Self {
         Vertex {
             north: 0,
@@ -37,7 +54,22 @@ impl Vertex {
         }
     }
 
-    // Method to initialize the vertex with given coordinates and determine its type.
+    /// Initializes the vertex with given coordinates and determines its type.
+    ///
+    /// The vertex type is determined by counting how many coordinates are zero:
+    /// - 3 or more zeros: `None`
+    /// - Exactly 2 zeros: `Corner`
+    /// - 1 zero on south boundary: `Top`
+    /// - 1 zero on north boundary: `Bottom`
+    /// - 1 zero on east boundary: `Left`
+    /// - 1 zero on west boundary: `Right`
+    ///
+    /// # Arguments
+    ///
+    /// * `north` - The north coordinate.
+    /// * `east` - The east coordinate.
+    /// * `south` - The south coordinate.
+    /// * `west` - The west coordinate.
     pub fn init(&mut self, north: i32, east: i32, south: i32, west: i32) {
         self.north = north;
         self.east = east;

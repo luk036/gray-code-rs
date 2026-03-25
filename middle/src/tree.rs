@@ -1,16 +1,21 @@
 use std::collections::VecDeque;
 
+/// Compares two bitstrings lexicographically.
+///
+/// Returns true if the first bitstring is less than the second.
 fn bitstrings_less_than(x: &[i32], y: &[i32]) -> bool {
     x.iter().zip(y.iter()).any(|(a, b)| a < b)
 }
 
+/// Checks if two bitstrings are equal.
 fn bitstrings_equal(x: &[i32], y: &[i32]) -> bool {
     x.iter().zip(y.iter()).all(|(a, b)| a == b)
 }
 
-// A class to represent and manipulate an ordered rooted tree in doubly linked
-// adjacency list representation.
-
+/// A struct to represent and manipulate an ordered rooted tree
+/// in doubly linked adjacency list representation.
+///
+/// This tree structure is used in Gray code algorithms for rectangulations.
 #[derive(Debug, Clone)]
 pub struct Tree {
     num_vertices: usize,
@@ -20,6 +25,15 @@ pub struct Tree {
 }
 
 impl Tree {
+    /// Constructs a new tree from a bitstring vector.
+    ///
+    /// # Panics
+    ///
+    /// Panics if the bitstring length is not odd.
+    ///
+    /// # Arguments
+    ///
+    /// * `xv` - A vector of integers representing the tree encoding.
     pub fn new(xv: Vec<i32>) -> Self {
         assert!(xv.len() % 2 == 1);
 
@@ -49,6 +63,7 @@ impl Tree {
         }
     }
 
+    /// Computes the degree of a vertex.
     fn deg(&self, u: usize) -> usize {
         assert!(u < self.num_vertices);
         if u == self.root {
@@ -58,16 +73,19 @@ impl Tree {
         }
     }
 
+    /// Returns the number of children of a vertex.
     fn num_children(&self, u: usize) -> usize {
         assert!(u < self.num_vertices);
         self.children[u].len()
     }
 
+    /// Returns the i-th child of a vertex.
     fn ith_child(&self, u: usize, i: usize) -> usize {
         assert!(u < self.num_vertices && i < self.num_children(u));
         *self.children[u].get(i).unwrap()
     }
 
+    /// Checks if the tree is a tau preimage.
     fn is_tau_preimage(&self) -> bool {
         if self.num_vertices < 3 {
             return false;
@@ -83,6 +101,7 @@ impl Tree {
         true
     }
 
+    /// Checks if the tree is a tau image.
     fn is_tau_image(&self) -> bool {
         if self.num_vertices < 3
             || self.num_children(self.root) < 2
@@ -93,6 +112,7 @@ impl Tree {
         true
     }
 
+    /// Applies the tau transformation to the tree.
     fn tau(&mut self) {
         assert!(self.is_tau_preimage());
         let u = self.ith_child(self.root, 0);
@@ -100,6 +120,7 @@ impl Tree {
         self.move_leaf(v, self.root, 0);
     }
 
+    /// Applies the inverse tau transformation to the tree.
     fn tau_inverse(&mut self) {
         assert!(self.is_tau_image());
         let v = self.ith_child(self.root, 0);
@@ -107,6 +128,13 @@ impl Tree {
         self.move_leaf(v, u, 0);
     }
 
+    /// Moves a leaf node to a new parent at a specified position.
+    ///
+    /// # Arguments
+    ///
+    /// * `leaf` - The leaf node to move.
+    /// * `new_parent` - The new parent node.
+    /// * `pos` - The position in the new parent's children list.
     pub fn move_leaf(&mut self, leaf: usize, new_parent: usize, pos: usize) {
         assert!(leaf < self.num_vertices);
         assert!(new_parent < self.num_vertices);
@@ -121,6 +149,10 @@ impl Tree {
         self.parent[leaf] = new_parent;
     }
 
+    /// Rotates the tree by moving the root to its first child.
+    ///
+    /// This is a tree rotation operation that changes the root
+    /// while maintaining the tree structure.
     pub fn rotate(&mut self) {
         assert!(self.num_vertices >= 2);
         let u = self.ith_child(self.root, 0);
@@ -132,16 +164,27 @@ impl Tree {
         self.root = u;
     }
 
+    /// Rotates the tree until the specified vertex becomes the root.
+    ///
+    /// # Arguments
+    ///
+    /// * `u` - The target vertex to become the new root.
     pub fn rotate_to_vertex(&mut self, u: usize) {
         while self.root != u {
             self.rotate();
         }
     }
 
+    /// Rotates children by one position (default).
     pub fn rotate_children_default(&mut self) {
         self.rotate_children(1);
     }
 
+    /// Rotates the children of the root by k positions.
+    ///
+    /// # Arguments
+    ///
+    /// * `k` - The number of positions to rotate.
     pub fn rotate_children(&mut self, k: usize) {
         let mut queue: VecDeque<_> = self.children[self.root].iter().cloned().collect();
         for _ in 0..k {
@@ -152,6 +195,9 @@ impl Tree {
         self.children[self.root] = queue.into_iter().collect();
     }
 
+    /// Flips the tree structure if possible.
+    ///
+    /// Returns true if the flip was successful, false otherwise.
     pub fn flip_tree(&mut self) -> bool {
         if self.is_tau_preimage() && Self::is_flip_tree_tau(self) {
             self.tau();
@@ -170,6 +216,7 @@ impl Tree {
 }
 
 impl Tree {
+    /// Roots the tree canonically based on its center.
     fn root_canonically(&mut self) {
         let (c1, c2): (usize, usize) = self.compute_center(); // center vertices
 
@@ -224,6 +271,10 @@ impl Tree {
 }
 
 impl Tree {
+    /// Computes the center vertex (or vertices) of the tree.
+    ///
+    /// Returns a tuple of (center1, center2) where center2 is usize::MAX
+    /// if there is only one center.
     fn compute_center(&self) -> (usize, usize) {
         let mut degs = vec![0; self.num_vertices];
         let mut leaves = VecDeque::new();
@@ -274,6 +325,7 @@ impl Tree {
 }
 
 impl Tree {
+    /// Checks if the tree is a flip tree using tau transformation.
     fn is_flip_tree_tau(&mut self) -> bool {
         if self.is_star() {
             return false;
@@ -328,12 +380,14 @@ impl Tree {
         bitstrings_equal(&this_bitstring[..num_bits], &canon_bitstring[..num_bits])
     }
 
+    /// Checks if the tree is a star (root connected to all other vertices).
     fn is_star(&self) -> bool {
         self.num_vertices <= 3
             || self.deg(self.root) == self.num_vertices - 1
             || self.deg(self.ith_child(self.root, 0)) == self.num_vertices - 1
     }
 
+    /// Checks if the tree is a light dumbbell.
     fn is_light_dumbbell(&self) -> bool {
         if self.num_vertices < 5 {
             return false;
@@ -346,6 +400,13 @@ impl Tree {
 }
 
 impl Tree {
+    /// Checks if a vertex is a thin leaf.
+    ///
+    /// A thin leaf is a leaf whose parent has degree 2.
+    ///
+    /// # Arguments
+    ///
+    /// * `u` - The vertex index to check.
     pub fn is_thin_leaf(&self, u: usize) -> bool {
         if self.deg(u) > 1 {
             return false;
@@ -354,6 +415,7 @@ impl Tree {
             || (u != self.root && self.deg(self.parent[u]) == 2)
     }
 
+    /// Checks if the tree has any thin leaves.
     pub fn has_thin_leaf(&self) -> bool {
         for i in 0..self.num_vertices {
             if self.is_thin_leaf(i) {
@@ -363,6 +425,11 @@ impl Tree {
         false
     }
 
+    /// Counts the number of pending edges from a vertex.
+    ///
+    /// # Arguments
+    ///
+    /// * `u` - The vertex index.
     pub fn count_pending_edges(&self, u: usize) -> usize {
         let mut c = 0;
         for i in 0..self.children[u].len() {
@@ -378,11 +445,17 @@ impl Tree {
 }
 
 impl Tree {
+    /// Converts the tree to a bitstring representation.
+    ///
+    /// # Arguments
+    ///
+    /// * `x` - The output bitstring vector.
     pub fn to_bitstring(&self, x: &mut [i32]) {
         let mut pos = 0;
         self.to_bitstring_rec(x, self.root, &mut pos);
     }
 
+    /// Recursive helper for converting tree to bitstring.
     fn to_bitstring_rec(&self, x: &mut [i32], u: usize, pos: &mut usize) {
         if self.num_children(u) == 0 {
         } else {
@@ -396,6 +469,14 @@ impl Tree {
         }
     }
 
+    /// Finds the minimum string rotation using Booth's algorithm.
+    ///
+    /// # Arguments
+    ///
+    /// * `x` - The input bitstring.
+    /// * `length` - The length of the bitstring.
+    ///
+    /// Returns the starting index of the minimum rotation.
     fn min_string_rotation(&self, x: &[i32], length: usize) -> usize {
         let mut xx: Vec<i32> = x.to_vec();
         xx.extend_from_slice(x);

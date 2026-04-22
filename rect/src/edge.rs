@@ -69,7 +69,7 @@ mod tests {
     use super::*;
 
     #[test]
-    fn testedgeinitialization() {
+    fn test_edge_initialization() {
         let mut edge = Edge::new();
         edge.init(EdgeDir::Hor, 1, 2, 3, 4, 5, 6, 7);
 

@@ -80,16 +80,14 @@ impl Vertex {
     ///
     /// Returns the number of steps taken.
     pub fn to_last_vertex(&mut self) -> usize {
-        // Stub implementation
-        0
+        todo!("to_last_vertex implementation pending")
     }
 
     /// Converts the vertex to the first vertex position.
     ///
     /// Returns the number of steps taken.
     pub fn to_first_vertex(&mut self) -> usize {
-        // Stub implementation
-        0
+        todo!("to_first_vertex implementation pending")
     }
 
     /// Flips the bit at the specified index.

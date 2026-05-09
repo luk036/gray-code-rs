@@ -640,7 +640,7 @@ impl Rectangulation {
         self.walls[x as usize].last = a;
     }
 }
-        
+
 impl Rectangulation {
     fn init(&mut self, vertices: Vec<Vertex>, walls: Vec<Wall>, edges: Vec<Edge>, rectangles: Vec<Rectangle>) {
         self.edges = edges;

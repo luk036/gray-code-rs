@@ -2,5 +2,8 @@
 name = "middle"
 version = "0.1.1"
 edition = "2021"
+description = "Gray code and Hamiltonian cycle algorithms"
+license = "MIT OR Apache-2.0"
+repository = "https://github.com/luk036/gray-code-rs"
 
 [dependencies]

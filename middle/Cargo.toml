@@ -6,4 +6,7 @@ description = "Gray code and Hamiltonian cycle algorithms"
 license = "MIT OR Apache-2.0"
 repository = "https://github.com/luk036/gray-code-rs"
 
+[package.metadata.docs.rs]
+rustdoc-args = ["--html-in-header", "src/doc-header.html"]
+
 [dependencies]

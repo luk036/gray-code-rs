@@ -7,6 +7,12 @@ type VisitFn<'a> = dyn Fn(&Vec<i32>, i32) + 'a;
 
 /// A struct representing a Hamiltonian cycle in a Gray code structure.
 ///
+/// A Hamiltonian cycle on the $(2n+1)$-dimensional hypercube $\{0,1\}^{2n+1}$
+/// visits every vertex exactly once with consecutive vertices differing by
+/// exactly one bit:
+///
+/// $$ d_H(v_i, v_{i+1}) = 1, \quad \bigcup_i v_i = \{0,1\}^{2n+1} $$
+///
 /// This is used for generating and traversing Hamiltonian cycles
 /// in the context of rectangulation Gray codes.
 pub struct HamCycle<'a> {
@@ -94,6 +100,8 @@ impl<'a> HamCycle<'a> {
     }
 
     /// Flips a sequence of bits in the cycle.
+    ///
+    /// For each bit index $j$ in $seq$, $x_j' = 1 - x_j$.
     ///
     /// # Arguments
     ///

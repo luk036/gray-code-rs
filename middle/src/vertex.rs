@@ -52,6 +52,8 @@ impl Vertex {
     ///
     /// This operation flips each bit (0 becomes 1, 1 becomes 0) except
     /// for the last element, then reverses the order of the first len-2 elements.
+    ///
+    /// $$ b_i' = 1 - b_i \quad (i < n-1), \quad \text{then reverse } b_0 \ldots b_{n-3} $$
     pub fn rev_inv(&mut self) {
         let len = self.bits.len();
         for i in 0..len - 1 {
@@ -65,6 +67,8 @@ impl Vertex {
     /// A vertex is considered a "first vertex" if the cumulative height
     /// (computed as sum of 2*bit - 1 for each position) reaches zero
     /// before the end of the bitstring.
+    ///
+    /// $$ h_k = \sum_{i=0}^{k} (2b_i - 1), \quad \exists k < 2n : h_k = 0 $$
     pub fn is_first_vertex(&self) -> bool {
         let mut height = 0;
         for i in &self.bits[..self.bits.len() - 1] {
@@ -91,6 +95,8 @@ impl Vertex {
     }
 
     /// Flips the bit at the specified index.
+    ///
+    /// $$ x_i' = 1 - x_i $$
     ///
     /// # Arguments
     ///

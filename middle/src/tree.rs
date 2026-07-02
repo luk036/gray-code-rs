@@ -27,6 +27,9 @@ pub struct Tree {
 impl Tree {
     /// Constructs a new tree from a bitstring vector.
     ///
+    /// The bitstring encodes the tree structure using a depth-first traversal:
+    /// $1$ means "step down to child", $0$ means "step up to parent".
+    ///
     /// # Panics
     ///
     /// Panics if the bitstring length is not odd.
@@ -447,6 +450,9 @@ impl Tree {
 impl Tree {
     /// Converts the tree to a bitstring representation.
     ///
+    /// Uses depth-first traversal: output $1$ when stepping to a child,
+    /// output $0$ when returning to the parent.
+    ///
     /// # Arguments
     ///
     /// * `x` - The output bitstring vector.
@@ -470,6 +476,9 @@ impl Tree {
     }
 
     /// Finds the minimum string rotation using Booth's algorithm.
+    ///
+    /// Finds $k$ such that $x_k x_{k+1} \cdots$ is the lexicographically
+    /// smallest rotation of $x_0 x_1 \cdots x_{n-1}$.
     ///
     /// # Arguments
     ///

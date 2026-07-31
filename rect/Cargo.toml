@@ -2,6 +2,7 @@
 name = "rect"
 version = "0.1.2"
 edition = "2021"
+rust-version = "1.70"
 description = "Rectangulation algorithms and data structures"
 license = "MIT OR Apache-2.0"
 repository = "https://github.com/luk036/gray-code-rs"

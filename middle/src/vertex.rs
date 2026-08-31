@@ -9,6 +9,7 @@ pub struct Vertex {
 }
 
 impl PartialEq for Vertex {
+    #[inline]
     fn eq(&self, other: &Self) -> bool {
         self.bits == other.bits
     }
@@ -17,6 +18,7 @@ impl PartialEq for Vertex {
 impl Eq for Vertex {}
 
 impl std::fmt::Display for Vertex {
+    #[inline]
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         write!(f, "{:?}", self.bits)
     }
@@ -39,11 +41,13 @@ impl Vertex {
     }
 
     /// Returns an immutable reference to the underlying bitstring.
+    #[inline]
     pub fn get_bits(&self) -> &Vec<i32> {
         &self.bits
     }
 
     /// Returns a mutable reference to the underlying bitstring.
+    #[inline]
     pub fn get_bits_mut(&mut self) -> &mut Vec<i32> {
         &mut self.bits
     }
@@ -83,6 +87,7 @@ impl Vertex {
     /// Converts the vertex to the last vertex position.
     ///
     /// Returns the number of steps taken.
+    #[inline]
     pub fn to_last_vertex(&mut self) -> usize {
         todo!("to_last_vertex implementation pending")
     }
@@ -90,6 +95,7 @@ impl Vertex {
     /// Converts the vertex to the first vertex position.
     ///
     /// Returns the number of steps taken.
+    #[inline]
     pub fn to_first_vertex(&mut self) -> usize {
         todo!("to_first_vertex implementation pending")
     }

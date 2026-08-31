@@ -20,6 +20,7 @@ pub struct Edge {
 }
 
 impl Default for Edge {
+    #[inline]
     fn default() -> Self {
         Self::new()
     }

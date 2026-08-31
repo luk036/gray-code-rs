@@ -3,11 +3,13 @@ use std::collections::VecDeque;
 /// Compares two bitstrings lexicographically.
 ///
 /// Returns true if the first bitstring is less than the second.
+#[inline]
 fn bitstrings_less_than(x: &[i32], y: &[i32]) -> bool {
     x.iter().zip(y.iter()).any(|(a, b)| a < b)
 }
 
 /// Checks if two bitstrings are equal.
+#[inline]
 fn bitstrings_equal(x: &[i32], y: &[i32]) -> bool {
     x.iter().zip(y.iter()).all(|(a, b)| a == b)
 }
@@ -179,6 +181,7 @@ impl Tree {
     }
 
     /// Rotates children by one position (default).
+    #[inline]
     pub fn rotate_children_default(&mut self) {
         self.rotate_children(1);
     }

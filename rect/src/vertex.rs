@@ -37,6 +37,7 @@ pub struct Vertex {
 }
 
 impl Default for Vertex {
+    #[inline]
     fn default() -> Self {
         Self::new()
     }

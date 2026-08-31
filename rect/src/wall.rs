@@ -19,6 +19,7 @@ impl Wall {
     /// assert_eq!(wall.first_, 0);
     /// assert_eq!(wall.last_, 0);
     /// ```
+    #[inline]
     pub fn new() -> Self {
         Wall::default()
     }

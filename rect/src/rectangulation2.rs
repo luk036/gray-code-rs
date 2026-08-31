@@ -94,6 +94,7 @@ impl Rectangulation {
         rectangulation
     }
 
+    #[inline]
     fn set_all_vertical(&mut self) {
         // Implement this method according to your needs
     }
@@ -127,6 +128,7 @@ impl Rectangulation {
         rectangulation
     }
 
+    #[inline]
     fn set_all_vertical(&mut self) {
         // Implement this method according to your needs
     }
@@ -509,6 +511,7 @@ impl Rectangulation {
     /// Prints coordinates for a diagonal rectangulation.
     ///
     /// This is obtained by mirroring the generic case along the main diagonal.
+    #[inline]
     pub fn print_coordinates_diagonal(&self) {
         // this code is obtained by mirroring the case RectangulationType::Generic along the main diagonal
     }

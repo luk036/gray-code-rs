@@ -88,6 +88,7 @@ impl<'a> HamCycle<'a> {
     }
 
     /// Computes the Hamiltonian cycle.
+    #[inline]
     fn compute_ham_cycle(&mut self) {
         todo!("compute_ham_cycle implementation pending")
     }
@@ -95,6 +96,7 @@ impl<'a> HamCycle<'a> {
 
 impl<'a> HamCycle<'a> {
     /// Returns the length of the Hamiltonian cycle.
+    #[inline]
     pub fn get_length(&self) -> i64 {
         self.length
     }
